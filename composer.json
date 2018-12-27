@@ -1,0 +1,12 @@
+{
+    "name": "zloykolobok/megaplan2",
+    "description": "Package for working with API v1 Megaplan",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman Nikolaenkov",
+            "email": "rnikolaenkov@yandex.ru"
+        }
+    ],
+    "require": {}
+}
