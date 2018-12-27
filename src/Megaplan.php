@@ -97,12 +97,6 @@ class Megaplan
         $this->req = new SdfApi_Request( $this->accessId, $this->secretKey, $this->host, $this->https );
     }
 
-    public function test()
-    {
-        $this->auth();
-        dd($this->login);
-    }
-
     /**
      * *************  СДЕЛКИ  *************
      */

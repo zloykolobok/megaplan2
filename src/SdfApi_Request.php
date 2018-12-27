@@ -1,12 +1,12 @@
 <?php
-namespace Zloykolobok\Megaplan;
+namespace Zloykolobok\Megaplan2;
 use DateTime;
-use Zloykolobok\Megaplan\SdfApi_RequestInfo;
+use Zloykolobok\Megaplan2\SdfApi_RequestInfo;
 
 /**
  * Библиотека для формирования запроса к API Мегаплана
  * Полное описание API Мегаплана: http://wiki.megaplan.ru/API
- * 
+ *
  * @since      31.03.2010 19:44:58
  * @author     megaplan
  */
