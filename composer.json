@@ -1,12 +1,13 @@
 {
     "name": "zloykolobok/megaplan2",
-    "description": "Package for working with API v1 Megaplan",
+    "description": "Working with CRM Megaplan",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Roman Nikolaenkov",
-            "email": "rnikolaenkov@yandex.ru"
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zloykolobok\\Megaplan2\\": "src/"
         }
-    ],
-    "require": {}
+    }
 }
