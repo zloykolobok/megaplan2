@@ -110,6 +110,31 @@ class Deal extends Megaplan
         return $raw;
     }
 
+    /**
+     * Редактирование/Создание сделки
+     * https://dev.megaplan.ru/api/API_deals.html#api-deals-save
+     *
+     * @param [type] $id - ID сделки, Если не указан то будет создана новая сделка
+     * @param [type] $program_id - ID программы (схемы), Обязательное поле при создании сделки. При редактировании игнорируется.
+     * @param [type] $status_id - ID статуса сделки, Если не указан при создании сделки, то подбирается автоматически. Если указан при изменении сделки, то статус сделки будет изменён в зависимости от выставленного параметра StrictLogic.
+     * @param [type] $strict_logic - Строгая логика перехода из статуса в статус. По умолчанию: true., Если включена строгая логика, то для перехода в необходимый статус из текущего должен существовать переход, пользователь должен иметь на него права, отработают все триггеры. Если логика не включена, то статус просто изменится и всё.
+     * @param [type] $manager_id - Идентификатор пользователя, являющегося менеджером сделки
+     * @param [type] $contractor_id - Идентификатор клиента
+     * @param [type] $contact_id - Идентификатор контактного лица
+     * @param [type] $auditors - Идентификаторы пользователей являющихся аудиторами по сделке, Id перечисляются через запятую (Пример: „1000005,1013202“)
+     * @param [type] $description - Описание сделки
+     * @param [type] $paid_value - Заплачено (сумма должна быть передана в текущей базовой валюте системы), Актуально только при выставленном счете
+     * @param [type] $paid_rate - Стоимость
+     * @param [type] $paid_currency - Курс валюты
+     * Предварительная стоимость (сумма должна быть передана в текущей базовой валюте системы) Актуально только если в сделке нет товаров
+     * @param [type] $cost_value - Стоимость
+     * @param [type] $cost_rate - Курс валюты
+     * @param [type] $cost_currency - ID валюты
+     * @param [type] $files - Файлы
+     * @param [type] $customs - Пользовательские поля
+     * @param [type] $positions
+     * @return void
+     */
     public function save(
         $id, $program_id, $status_id, $strict_logic, $manager_id, $contractor_id, $contact_id,
         $auditors, $description, $paid_value, $paid_rate, $paid_currency, $cost_value, $cost_rate,
@@ -120,24 +145,39 @@ class Deal extends Megaplan
 
         $params = [];
 
-        if(!$id){
+        if($id){
             $params['Id'] = $id;
         }
 
         $params['ProgramId'] = $program_id;
-        $params['StatusId'] = $status_id;
-        $params['StrictLogic'] = $strict_logic;
-        $params['Model[Manager]'] = $manager_id;
-        $params['Model[Contractor]'] = $contractor_id;
-        $params['Model[Contact]'] = $contact_id;
-        $params['Model[Auditors]'] = $auditors;
-        $params['Model[Description]'] = $description;
-        $params['Model[Paid][Value]'] = $paid_value;
-        $params['Model[Paid][Rate]'] = $paid_rate;
-        $params['Model[Paid][Currency]'] = $paid_currency;
-        $params['Model[Cost][Value]'] = $cost_value;
-        $params['Model[Cost][Rate]'] = $cost_rate;
-        $params['Model[Cost][Currency]'] = $cost_currency;
+        if($status_id)
+            $params['StatusId'] = $status_id;
+        if($strict_logic)
+            $params['StrictLogic'] = $strict_logic;
+        if($manager_id)
+            $params['Model[Manager]'] = $manager_id;
+        if($contractor_id)
+            $params['Model[Contractor]'] = $contractor_id;
+        if($contact_id)
+            $params['Model[Contact]'] = $contact_id;
+        if($auditors)
+            $params['Model[Auditors]'] = $auditors;
+        if($description)
+            $params['Model[Description]'] = $description;
+        if($paid_value)
+            $params['Model[Paid][Value]'] = $paid_value;
+        if($paid_rate)
+            $params['Model[Paid][Rate]'] = $paid_rate;
+        if($paid_currency)
+            $params['Model[Paid][Currency]'] = $paid_currency;
+        if($cost_value)
+            $params['Model[Cost][Value]'] = $cost_value;
+        if($cost_rate)
+            $params['Model[Cost][Rate]'] = $cost_rate;
+        if($cost_currency)
+            $params['Model[Cost][Currency]'] = $cost_currency;
+
+
 
         // $files = [
         //     '<имя поля>' => [
@@ -145,22 +185,44 @@ class Deal extends Megaplan
         //     ]
         // ]
 
-        foreach ($files as $field => $file){
-            foreach($file as $key=>$f){
-                $params['Model['.$field.'][Add]['.$key.'][Content]'] = $f[1];
-                $params['Model['.$field.'][Add]['.$key.'][Name]'] = $f[0];
-            }
-        }
+        // foreach ($files as $field => $file){
+        //     foreach($file as $key=>$f){
+        //         $params['Model['.$field.'][Add]['.$key.'][Content]'] = $f[1];
+        //         $params['Model['.$field.'][Add]['.$key.'][Name]'] = $f[0];
+        //     }
+        // }
 
         //кастомные поля <имя поля> => <значение поля>
         foreach ($customs as $key => $value) {
-            $this->params['Model['.$key.']'] = $value;
+            $params['Model['.$key.']'] = $value;
         }
 
         $params['Positions'] = $positions;
 
-        $raw = $this->req->post('/BumsTradeApiV01/Deal/save.api',$this->params);
+        $raw = $this->req->post('/BumsTradeApiV01/Deal/save.api',$params);
         $raw = json_decode($raw);
+
+        return $raw;
+    }
+
+    /**
+     * Привязка сделки или задачи к сделке
+     * https://dev.megaplan.ru/api/API_deals.html#api-deal-link
+     *
+     * @param integer $id - ID сделки
+     * @param integer $relatedObjectId - ID связываемого объекта
+     * @param string $relatedObjectType - Тип связываемого объекта: deal, task или project
+     * @return void
+     */
+    public function saveRelation(int $id, int $relatedObjectId, string $relatedObjectType)
+    {
+        $params = [];
+
+        $params['Id'] = $id;
+        $params['RelatedObjectId'] = $relatedObjectId;
+        $params['RelatedObjectType'] = $relatedObjectType;
+
+        $raw = $this->req->post('/BumsTradeApiV01/Deal/saveRelation.api', $params);
 
         return $raw;
     }
