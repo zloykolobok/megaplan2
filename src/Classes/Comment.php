@@ -31,7 +31,7 @@ class Comment extends Megaplan
         $params['Model[Text]'] = $text;
         $params['Model[Work]'] = $work;
 
-        $raw = $this->req->pot('/BumsCommonApiV01/Comment/create.api',$params);
+        $raw = $this->req->post('/BumsCommonApiV01/Comment/create.api',$params);
         $raw = json_decode($raw);
 
         return $raw;
