@@ -11,7 +11,7 @@ use Zloykolobok\Megaplan2\Megaplan;
 
 class Contractor extends Megaplan
 {
-    public function list(int $filterId, int $limit, int $offset, string $qs, string $phone, array $model, bool $droppedOnly = false)
+    public function list($filterId, $limit, $offset, $qs, $phone, $model, $droppedOnly = false)
     {
         $this->auth();
 
