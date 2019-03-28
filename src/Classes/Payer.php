@@ -43,7 +43,7 @@ class Payer extends Megaplan
         if(!is_null($contractorId))
             $params['ContractorId'] = $contractorId;
         if(!is_null($payerId))
-            $params['PayerId'];
+            $params['PayerId'] = $payerId;
         if(!is_null($payerType))
             $params['PayerType'] = $payerType;
         if(!is_null($payerCountry))
