@@ -24,9 +24,10 @@ class Operation extends Megaplan
      * @param [type] $description - string	описание
      * @param [type] $date - datetime	Время операции
      * @param [type] $controlDate - datetime	Контрольное время
+     * @param [type] $kind - boolean Если расход обязательно true
      * @return void
      */
-    public function save($id, $operationType, $sum, $secondarySum, $realAccount, $contractor, $invoice, $description, $date, $controlDate)
+    public function save($id, $operationType, $sum, $secondarySum, $realAccount, $contractor, $invoice, $description, $date, $controlDate, $kind = false)
     {
         $this->auth();
 
@@ -57,6 +58,9 @@ class Operation extends Megaplan
 
         if(!is_null($description))
             $params['Model[Description]'] = $description;
+
+        if($kind)
+            $params['Model[Kind]']='expense';
 
 
         $raw = $this->req->post('/BumsFinApiV01/Operation/save.api',$params);
