@@ -52,7 +52,7 @@ class Operation extends Megaplan
         if(!is_null($invoice))
             $params['Model[Invoice]'] = $invoice;
         if(!is_null($date))
-            $params['Model[Date]'] = $fdate;
+            $params['Model[Date]'] = $date;
         if(!is_null($controlDate))
             $params['Model[ControlDate]'] = $controlDate;
 
