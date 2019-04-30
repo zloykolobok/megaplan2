@@ -20,7 +20,7 @@ class Comment extends Megaplan
      * @param integer $work
      * @return void
      */
-    public function create(string $subjectType, int $subjectId, string $text, int $work = null)
+    public function create(string $subjectType, int $subjectId, string $text, $file = null, int $work = null)
     {
         $this->auth();
 
@@ -29,6 +29,7 @@ class Comment extends Megaplan
         $params['SubjectId'] = $subjectId;
         $params['SubjectId'] = $subjectId;
         $params['Model[Text]'] = $text;
+        $params['Model[Attaches]'][] = $file;
         $params['Model[Work]'] = $work;
 
         $raw = $this->req->post('/BumsCommonApiV01/Comment/create.api',$params);
