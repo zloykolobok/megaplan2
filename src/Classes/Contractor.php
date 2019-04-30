@@ -70,7 +70,8 @@ class Contractor extends Megaplan
         $phones,
         $birthday,
         $responsibles,
-        $responsibleContractors
+        $responsibleContractors,
+        $customs
         )
     {
         $this->auth();
@@ -104,11 +105,33 @@ class Contractor extends Megaplan
             $params['Model[Responsibles]'] = $responsibles;
         if(!is_null($responsibleContractors))
             $params['Model[ResponsibleContractors]'] = $responsibleContractors;
+
         //TODO: добавить Attaches
         //TODO: Model[Locations][location]
-        //TODO: Model[Имя_поля]
+        if(!is_null($customs)){
+            foreach ($customs as $key => $val){
+                $params[$key] = $val;
+            }
+        }
 
         $raw = $this->req->post('/BumsCrmApiV01/Contractor/save.api',$params);
+        $raw = json_decode($raw);
+
+        return $raw;
+    }
+
+    /**
+     * Список полей клиента
+     *
+     * @return mixed
+     * @throws \Zloykolobok\Megaplan2\Exception\ConnectionException
+     */
+    public function listFields()
+    {
+        $this->auth();
+        $params = [];
+
+        $raw = $this->req->post('/BumsCrmApiV01/Contractor/listFields.api',$params);
         $raw = json_decode($raw);
 
         return $raw;
