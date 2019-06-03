@@ -115,6 +115,7 @@ class Deal extends Megaplan
      * https://dev.megaplan.ru/api/API_deals.html#api-deals-save
      *
      * @param [type] $id - ID сделки, Если не указан то будет создана новая сделка
+     * @param [type] $customName - Название сделки, в схеме должно быть включено поле
      * @param [type] $program_id - ID программы (схемы), Обязательное поле при создании сделки. При редактировании игнорируется.
      * @param [type] $status_id - ID статуса сделки, Если не указан при создании сделки, то подбирается автоматически. Если указан при изменении сделки, то статус сделки будет изменён в зависимости от выставленного параметра StrictLogic.
      * @param [type] $strict_logic - Строгая логика перехода из статуса в статус. По умолчанию: true., Если включена строгая логика, то для перехода в необходимый статус из текущего должен существовать переход, пользователь должен иметь на него права, отработают все триггеры. Если логика не включена, то статус просто изменится и всё.
@@ -138,7 +139,7 @@ class Deal extends Megaplan
     public function save(
         $id, $program_id, $status_id, $strict_logic, $manager_id, $contractor_id, $contact_id,
         $auditors, $description, $paid_value, $paid_rate, $paid_currency, $cost_value, $cost_rate,
-        $cost_currency, $files, $customs, $positions
+        $cost_currency, $files, $customs, $positions, $customName = null
     )
     {
         $this->auth();
@@ -147,6 +148,10 @@ class Deal extends Megaplan
 
         if($id){
             $params['Id'] = $id;
+        }
+
+        if($customName){
+            $params['Model[CustomName]'] = $customName;
         }
 
         $params['ProgramId'] = $program_id;
