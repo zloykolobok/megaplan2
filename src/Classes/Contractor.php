@@ -136,4 +136,34 @@ class Contractor extends Megaplan
 
         return $raw;
     }
+
+    /**
+     * Карточка клиента
+     *
+     * @param integer $id - ID клиента
+     * @param array $requestedFields - Массив полей, которые необходимо вывести.
+     * @param [type] $format - Если передать значение «full», номера клиента будут выводиться с комментариями и префиксами.
+     * @return void
+     */
+    public function card(int $id, array $requestedFields, $format = null)
+    {
+        $this->auth();
+
+        $params = [];
+        $params['Id'] = $id;
+
+        foreach ($requestedFields as $val ){
+            $params['RequestedFields'][] = $val;
+        }
+
+        if(!is_null($format)){
+            $params['FormatSettings[phone]'] = $format;
+        }
+
+        $raw = $this->req->get('/BumsCrmApiV01/Contractor/card.api',$params);
+
+        $raw = json_decode($raw);
+
+        return $raw;
+    }
 }
