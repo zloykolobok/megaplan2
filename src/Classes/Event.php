@@ -61,7 +61,7 @@ class Event extends Megaplan
         $params['SendLetter'] = $sendLetter;
 
 
-        $raw = $this->req->post('/BumsTimeApiV01/Event/categories.api', $params);
+        $raw = $this->req->post('/BumsTimeApiV01/Event/finish.api', $params);
         $raw = json_decode($raw);
 
         return $raw;
