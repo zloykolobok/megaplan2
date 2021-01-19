@@ -6,6 +6,7 @@
 
 namespace Zloykolobok\Megaplan2\Classes;
 
+use Illuminate\Support\Facades\Storage;
 use Zloykolobok\Megaplan2\Megaplan;
 
 class Deal extends Megaplan
@@ -105,6 +106,7 @@ class Deal extends Megaplan
         $params['Offset'] = $offset;
 
         $raw = $this->req->get('/BumsTradeApiV01/Deal/list.api',$params);
+
         $raw = json_decode($raw);
 
         return $raw;
@@ -184,18 +186,22 @@ class Deal extends Megaplan
 
 
 
-        // $files = [
-        //     '<имя поля>' => [
-        //          ['Name','Content'],
-        //     ]
-        // ]
+//        $uploadFiles = [];
+//            $filesList = ['readme.txt', 'test.txt'];
+//            foreach ($filesList as $f) {
+//
+//                $uploadFiles['Category1000114CustomFieldTehnicheskoeZadanieFayl'][] = [
+//                    'Name' => $f,
+//                    'Content' => base64_encode(Storage::get('apex/' . $f)),
+//                ];
+//            }
 
-        // foreach ($files as $field => $file){
-        //     foreach($file as $key=>$f){
-        //         $params['Model['.$field.'][Add]['.$key.'][Content]'] = $f[1];
-        //         $params['Model['.$field.'][Add]['.$key.'][Name]'] = $f[0];
-        //     }
-        // }
+        foreach ($files as $field => $file){
+            foreach($file as $key=>$f){
+                $params['Model['.$field.'][Add]['.$key.'][Content]'] = $f['Content'];
+                $params['Model['.$field.'][Add]['.$key.'][Name]'] = $f['Name'];
+            }
+        }
 
         //кастомные поля <имя поля> => <значение поля>
         foreach ($customs as $key => $value) {
@@ -206,7 +212,6 @@ class Deal extends Megaplan
 
         $raw = $this->req->post('/BumsTradeApiV01/Deal/save.api',$params);
         $raw = json_decode($raw);
-
         return $raw;
     }
 
@@ -228,6 +233,7 @@ class Deal extends Megaplan
         $params['RelatedObjectType'] = $relatedObjectType;
 
         $raw = $this->req->post('/BumsTradeApiV01/Deal/saveRelation.api', $params);
+        $raw = json_decode($raw);
 
         return $raw;
     }
