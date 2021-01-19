@@ -227,7 +227,7 @@ class Deal extends Megaplan
     public function saveRelation(int $id, int $relatedObjectId, string $relatedObjectType)
     {
         $this->auth();
-        
+
         $params = [];
 
         $params['Id'] = $id;
