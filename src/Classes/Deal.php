@@ -212,7 +212,7 @@ class Deal extends Megaplan
 
         $raw = $this->req->post('/BumsTradeApiV01/Deal/save.api',$params);
         $raw = json_decode($raw);
-        
+
         return $raw;
     }
 

@@ -22,7 +22,6 @@ class Comment extends Megaplan
      */
     public function create(string $subjectType, int $subjectId, string $text, $file = null, int $work = null)
     {
-        dd('stop');
         $this->auth();
 
         $params = [];
@@ -35,7 +34,6 @@ class Comment extends Megaplan
 
         $raw = $this->req->post('/BumsCommonApiV01/Comment/create.api',$params);
         $raw = json_decode($raw);
-        dd($raw);
 
         return $raw;
     }
